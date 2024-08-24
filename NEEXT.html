@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEEXT</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #007bff;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 10px 20px;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        header h1 {
+            margin: 10px 0;
+            font-size: 2.5em;
+            color: #007bff;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #007bff;
+            font-size: 2em;
+        }
+
+        textarea, select, button {
+            width: 100%;
+            max-width: 800px;
+            margin: 15px 0;
+            padding: 15px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background-color: #1f1f1f;
+            color: #ffffff;
+        }
+
+        textarea {
+            height: 200px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #007bff;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            color: #999999;
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid #007bff;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        .section {
+            border-radius: 10px;
+            background-color: #1f1f1f;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .highlight {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#convert">Convert</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </nav>
+        <h1>NEEXT</h1>
+    </header>
+    
+    <main id="home">
+        <section id="convert" class="section">
+            <h2>Convert Your Contacts to VCF</h2>
+            <form id="contactForm">
+                <label for="contactInput">Enter phone numbers separated by commas:</label>
+                <textarea id="contactInput" placeholder="+55 21 98836-6471, +55 27 99867-8829,..."></textarea>
+                
+                <label for="fileName">Select file name:</label>
+                <select id="fileName">
+                    <option value="neext1">neext1</option>
+                    <option value="neext2">neext2</option>
+                    <option value="neext3">neext3</option>
+                    <option value="neext4">neext4</option>
+                    <option value="neext5">neext5</option>
+                    <option value="neext6">neext6</option>
+                    <option value="neext7">neext7</option>
+                    <option value="neext8">neext8</option>
+                    <option value="neext9">neext9</option>
+                    <option value="neext10">neext10</option>
+                </select>
+                
+                <button type="button" onclick="generateVCF()">Generate VCF</button>
+            </form>
+            
+            <a id="downloadLink" style="display: none; font-size: 1.2em; color: #007bff;">Download your VCF file</a>
+        </section>
+        
+        <section id="about" class="section">
+            <h2>About Us</h2>
+            <p>Welcome to NEEXT! We offer a simple and efficient way to convert your contact numbers into VCF files. Enjoy a seamless experience and convert your contacts effortlessly.</p>
+        </section>
+
+        <section class="section highlight">
+            <h2>Contact Conversion Tips</h2>
+            <p>Ensure phone numbers are properly formatted and separated by commas. The application will auto-correct common format issues, but double-check for accuracy.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>© Copyright 2019 NEEXT LTDA Specialist. All Rights Reserved</p>
+        <p>Design by neext</p>
+    </footer>
+
+    <script>
+        function generateVCF() {
+            const input = document.getElementById('contactInput').value;
+            const fileName = document.getElementById('fileName').value;
+            const numbers = input.split(',').map(num => num.trim());
+
+            let vcfContent = '';
+            let count = 1;
+
+            numbers.forEach(num => {
+                if (num) {
+                    // Auto-correct the format if needed
+                    const correctedNum = num.replace(/[^\d+]/g, '');
+                    vcfContent += `BEGIN:VCARD\nVERSION:3.0\nFN:neext${fileName} ${count}\nTEL:${correctedNum}\nEND:VCARD\n\n`;
+                    count++;
+                }
+            });
+
+            const blob = new Blob([vcfContent], { type: 'text/vcard' });
+            const url = URL.createObjectURL(blob);
+            
+            const downloadLink = document.getElementById('downloadLink');
+            downloadLink.href = url;
+            downloadLink.download = `${fileName}.vcf`;
+            downloadLink.style.display = 'block';
+            downloadLink.textContent = 'Download your VCF file';
+        }
+    </script>
+</body>
+</html>
