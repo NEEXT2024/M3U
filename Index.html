@@ -198,7 +198,7 @@
                 count++;
             });
 
-            const blob = new Blob([vcfContent], { type: 'text/vcard' });
+            const blob = new Blob([vcfContent], { type: 'text/vcf' });
             const url = URL.createObjectURL(blob);
             
             const downloadLink = document.getElementById('downloadLink');
