@@ -210,7 +210,7 @@
 
         function organizeByComma() {
             const input = document.getElementById('contactInput').value;
-            // Replace multiple spaces or line breaks with a single comma
+            // Split the input by any non-comma character, filter out empty values, and join with a single comma
             const organizedInput = input.split(/[\s,]+/).filter(num => num.length > 0).join(', ');
             document.getElementById('contactInput').value = organizedInput;
         }
